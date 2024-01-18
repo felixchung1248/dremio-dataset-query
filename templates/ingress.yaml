@@ -13,13 +13,13 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: 'listalldatasets'
+            name: {{ include "dremio-dataset-query.fullname" . }}
             port:
               number: {{ .Values.service.port }}
       - path: '/showdatasetdesc'
         pathType: Prefix
         backend:
           service:
-            name: 'showdatasetdesc'
+            name: {{ include "dremio-dataset-query.fullname" . }}
             port:
               number: {{ .Values.service.port }}
