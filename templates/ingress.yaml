@@ -9,17 +9,17 @@ spec:
   rules:
   - http:
       paths:
-      - path: '/ListAllDatasets'
+      - path: '/listalldatasets'
         pathType: Prefix
         backend:
           service:
-            name: 'ListAllDatasets'
+            name: 'listalldatasets'
             port:
               number: {{ .Values.service.port }}
-      - path: '/ShowDatasetDesc'
+      - path: '/showdatasetdesc'
         pathType: Prefix
         backend:
           service:
-            name: 'ShowDatasetDesc'
+            name: 'showdatasetdesc'
             port:
               number: {{ .Values.service.port }}

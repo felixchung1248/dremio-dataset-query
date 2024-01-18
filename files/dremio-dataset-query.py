@@ -45,14 +45,14 @@ def after_request(response):
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     return response
 
-@app.route('/ListAllDatasets', methods=['GET'])
+@app.route('/listalldatasets', methods=['GET'])
 def ListAllDatasets():
     logging.info('ListAllDatasets function processed a request.')
     all_datasets = []
     get_dataset_metadata("demo-catalog-01", all_datasets)
     return jsonify(all_datasets)
 
-@app.route('/ShowDatasetDesc', methods=['GET'])
+@app.route('/showdatasetdesc', methods=['GET'])
 def ShowDatasetDesc():
     logging.info('ShowDatasetDesc function processed a request.')
     name = request.args.get('name')
