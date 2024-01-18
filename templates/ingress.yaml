@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: http-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: '/ListAllDatasets'
+        pathType: Prefix
+        backend:
+          service:
+            name: 'ListAllDatasets'
+            port:
+              number: {{ .Values.service.port }}
+      - path: '/ShowDatasetDesc'
+        pathType: Prefix
+        backend:
+          service:
+            name: 'ShowDatasetDesc'
+            port:
+              number: {{ .Values.service.port }}
