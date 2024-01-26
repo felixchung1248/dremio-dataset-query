@@ -5,7 +5,7 @@ import logging
 app = Flask(__name__)
 
 
-def get_dataset_desc(dataset_path,env):
+def get_dataset_desc(dataset_path):
     response = requests.get(
         f"https://api.dremio.cloud/v0/projects/a340bd7d-89a1-4670-8bec-84278b1cf4ec/catalog/by-path/{dataset_path}",
         headers={"Authorization": "Bearer dnAp0jcDTtGsEH1vjEFtnx00D+kMkkUuXOo1W1Gn+EFX5JAy3mk8RQ4WLspLnQ=="},
