@@ -5,7 +5,7 @@ import logging
 app = Flask(__name__)
 
 
-def get_dataset_desc(dataset_path):
+def get_dataset_desc(dataset_path,env):
     response = requests.get(
         f"https://api.dremio.cloud/v0/projects/a340bd7d-89a1-4670-8bec-84278b1cf4ec/catalog/by-path/{dataset_path}",
         headers={"Authorization": "Bearer dnAp0jcDTtGsEH1vjEFtnx00D+kMkkUuXOo1W1Gn+EFX5JAy3mk8RQ4WLspLnQ=="},
@@ -16,10 +16,15 @@ def get_dataset_desc(dataset_path):
         print(f"Failed to get metadata for dataset: {response.content}")
         return None
 
-def get_dataset_metadata(dataset_path, all_datasets):
+def get_dataset_metadata(dataset_path, all_datasets, env):
+    projectId = 'a340bd7d-89a1-4670-8bec-84278b1cf4ec'
+    key = 'dnAp0jcDTtGsEH1vjEFtnx00D+kMkkUuXOo1W1Gn+EFX5JAy3mk8RQ4WLspLnQ=='
+    if env == 'PROD':
+        projectId = 'b8145bba-8797-4bd5-825e-87e3959a8bf6'
+        key = 'oeJVCon5ROWqlIAcwbV3xpm3O/WiuJ2A9SZRuVyKMcR2ytURfAVg3EYR8o3qFA=='
     response = requests.get(
-        f"https://api.dremio.cloud/v0/projects/a340bd7d-89a1-4670-8bec-84278b1cf4ec/catalog/by-path/{dataset_path}",
-        headers={"Authorization": "Bearer dnAp0jcDTtGsEH1vjEFtnx00D+kMkkUuXOo1W1Gn+EFX5JAy3mk8RQ4WLspLnQ=="},
+        f"https://api.dremio.cloud/v0/projects/{projectId}/catalog/by-path/{dataset_path}",
+        headers={"Authorization": f"Bearer {key}"},
     )
     if response.status_code == 200:
         datasets = response.json().get("children", [])
@@ -27,7 +32,7 @@ def get_dataset_metadata(dataset_path, all_datasets):
             sPath = '/'.join(dataset["path"])
             if dataset["type"] == "CONTAINER":
                 if dataset["containerType"] == "FOLDER":
-                    get_dataset_metadata(sPath, all_datasets)
+                    get_dataset_metadata(sPath, all_datasets, env)
             elif dataset["type"] == "DATASET":
                 all_datasets.append(sPath)
     else:
@@ -48,8 +53,9 @@ def after_request(response):
 @app.route('/listalldatasets', methods=['GET'])
 def ListAllDatasets():
     logging.info('ListAllDatasets function processed a request.')
+    env = request.args.get('env')
     all_datasets = []
-    get_dataset_metadata("demo-catalog-01", all_datasets)
+    get_dataset_metadata("demo-catalog-01", all_datasets, env)
     return jsonify(all_datasets)
 
 @app.route('/showdatasetdesc', methods=['GET'])
