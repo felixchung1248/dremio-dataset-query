@@ -15,3 +15,6 @@ ingress:
   # annotations, hosts, and other configurations go here
 
 resources: {}
+
+sandboxProjectId: 10e9ca7a-3273-4071-98f5-931080ebbc6f
+prodProjectId: 3b2fe735-cd95-4bf0-926f-2272a9402da7

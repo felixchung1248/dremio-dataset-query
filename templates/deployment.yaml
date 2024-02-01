@@ -23,6 +23,21 @@ spec:
           args: ["/usr/src/app/dataset-deploy-request.py"]
           ports:
             - containerPort: {{ .Values.service.port }}
+          env:
+            - name: DREMIO_SANDBOX_PROJECT_ID
+              value: {{ .Values.sandboxProjectId }}
+            - name: DREMIO_PROD_PROJECT_ID
+              value: {{ .Values.prodProjectId }}
+            - name: DREMIO_SANDBOX_KEY
+                valueFrom:
+                    secretKeyRef:
+                        name: dremio-sandbox-secret
+                        key: sandbox_key
+            - name: DREMIO_PROD_KEY
+                valueFrom:
+                    secretKeyRef:
+                        name: dremio-prod-secret
+                        key: prod_key
       volumes:
         - name: python-script-volume
           configMap:

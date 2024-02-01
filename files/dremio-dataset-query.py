@@ -1,14 +1,18 @@
 from flask import Flask, request, jsonify
 import requests
 import logging
+import os
 
 app = Flask(__name__)
-
+sandbox_project_id = os.environ['DREMIO_SANDBOX_PROJECT_ID']
+prod_project_id = os.environ['DREMIO_PROD_PROJECT_ID']
+sandbox_key = os.environ['DREMIO_SANDBOX_KEY']
+prod_key = os.environ['DREMIO_PROD_KEY']
 
 def get_dataset_desc(dataset_path):
     response = requests.get(
-        f"https://api.dremio.cloud/v0/projects/a340bd7d-89a1-4670-8bec-84278b1cf4ec/catalog/by-path/{dataset_path}",
-        headers={"Authorization": "Bearer dnAp0jcDTtGsEH1vjEFtnx00D+kMkkUuXOo1W1Gn+EFX5JAy3mk8RQ4WLspLnQ=="},
+        f"https://api.dremio.cloud/v0/projects/{sandbox_project_id}/catalog/by-path/{dataset_path}",
+        headers={"Authorization": f"Bearer {sandbox_key}"},
     )
     if response.status_code == 200:
         return response.json()
@@ -17,11 +21,11 @@ def get_dataset_desc(dataset_path):
         return None
 
 def get_dataset_metadata(dataset_path, all_datasets, env):
-    projectId = 'a340bd7d-89a1-4670-8bec-84278b1cf4ec'
-    key = 'dnAp0jcDTtGsEH1vjEFtnx00D+kMkkUuXOo1W1Gn+EFX5JAy3mk8RQ4WLspLnQ=='
+    projectId = sandbox_project_id
+    key = sandbox_key
     if env == 'PROD':
-        projectId = 'b8145bba-8797-4bd5-825e-87e3959a8bf6'
-        key = 'oeJVCon5ROWqlIAcwbV3xpm3O/WiuJ2A9SZRuVyKMcR2ytURfAVg3EYR8o3qFA=='
+        projectId = prod_project_id
+        key = prod_key
     response = requests.get(
         f"https://api.dremio.cloud/v0/projects/{projectId}/catalog/by-path/{dataset_path}",
         headers={"Authorization": f"Bearer {key}"},
