@@ -29,15 +29,15 @@ spec:
             - name: DREMIO_PROD_PROJECT_ID
               value: {{ .Values.prodProjectId }}
             - name: DREMIO_SANDBOX_KEY
-                valueFrom:
-                    secretKeyRef:
-                        name: dremio-sandbox-secret
-                        key: sandbox_key
+              valueFrom:
+                secretKeyRef:
+                    name: dremio-sandbox-secret
+                    key: sandbox_key
             - name: DREMIO_PROD_KEY
-                valueFrom:
-                    secretKeyRef:
-                        name: dremio-prod-secret
-                        key: prod_key
+              valueFrom:
+                secretKeyRef:
+                    name: dremio-prod-secret
+                    key: prod_key
       volumes:
         - name: python-script-volume
           configMap:
